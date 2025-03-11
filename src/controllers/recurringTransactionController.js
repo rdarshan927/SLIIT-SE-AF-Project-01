@@ -3,7 +3,6 @@ const Transaction = require("../models/Transaction");
 const Budget = require("../models/Budget");
 
 const handleRecurringTransactions = async () => {
-    console.log("Came inside recurring transactions!");
     try {
         const today = new Date();
         const transactions = await Transaction.find({

@@ -9,7 +9,7 @@ router.put("/update/:id", protect, adminOnly, updateUser);
 router.delete("/delete/:id", protect, adminOnly, deleteUser);
 router.get("/transactions", protect, adminOnly, getAllTransactions);
 router.get("/report", protect, adminOnly, getReport);
-router.get("/addcategory", protect, adminOnly, addCategory);
+router.post("/addcategory", protect, adminOnly, addCategory);
 router.put("/updatecategory/:id", protect, adminOnly, updateCategory);
 router.delete("/deletecategory/:id", protect, adminOnly, deleteCategory);
 

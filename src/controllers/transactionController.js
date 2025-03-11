@@ -130,13 +130,12 @@ const addTransaction = async (req, res) => {
 
         console.log("Transaction created:", transaction);
 
-        // ✅ Handle Bill Creation (if applicable)
         if (isBill) {
             const bill = new Bill({
-                userId: req.user.id,  // FIXED missing userId
+                userId: req.user.id,  
                 name: category, 
                 amount,
-                dueDate: date, // FIXED missing date
+                dueDate: date, 
                 reminderDaysBefore: 3, 
                 status: "pending",
             });

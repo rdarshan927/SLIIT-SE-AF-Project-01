@@ -4,7 +4,6 @@ const { addTransaction, getUserTransactions, deleteTransaction, updateTransactio
 
 const router = express.Router();
 
-console.log("came0");
 router.post("/add/", protect, addTransaction); // Add transaction
 router.get("/get/", protect, getUserTransactions); // View all transactions
 router.get("/getByTag/", protect, getTransactionsByTag);

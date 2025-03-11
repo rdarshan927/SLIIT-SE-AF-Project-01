@@ -35,8 +35,6 @@ const getDashboardSummary = async (req, res) => {
 
         } else {
             // 🔹 Regular User Dashboard: Personal finances
-            // const userId = req.user.id;
-            // const userId = new mongoose.Types.ObjectId(req.user.id);
             const userId = mongoose.Types.ObjectId.createFromHexString(req.user.id);
 
             const totalIncome = await Transaction.aggregate([

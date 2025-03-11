@@ -156,8 +156,6 @@ const checkLowBalances = async () => {
 
 const sendBillReminders = async () => {
     const today = new Date();
-
-    console.log("came inside send bills reminders!");
     
     // Find bills that need reminders
     const bills = await Bill.find({ status: "pending" });
@@ -184,7 +182,7 @@ const sendBillReminders = async () => {
 cron.schedule("* * * * *", sendBillReminders);
 
 // Schedule the task to run every day at 6 AM
-cron.schedule("* * * * *", checkLowBalances);
+cron.schedule("0 6 * * *", checkLowBalances);
 
 // Run the budget check daily at midnight
 cron.schedule("* * * * *", checkBudgets);

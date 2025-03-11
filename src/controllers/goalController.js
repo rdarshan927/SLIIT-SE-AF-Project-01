@@ -3,13 +3,12 @@ const Goal = require("../models/Goal");
 // **1. Create a new financial goal**
 const createGoal = async (req, res) => {
     try {
-        console.log("came 0");
         const { name, targetAmount, savedAmount, deadline, allocationPercentage } = req.body;
-        console.log("came 1" + name);
+        
         if (!name || !targetAmount || !deadline) {
             return res.status(400).json({ message: "All fields are required" });
         }
-        console.log("came 2");
+
         const goal = new Goal({
             userId: req.user.id,
             name,
@@ -18,11 +17,8 @@ const createGoal = async (req, res) => {
             deadline,
             allocationPercentage: allocationPercentage || 0,
         });
-        console.log("came 3");
         await goal.save();
-        console.log("came 4");
         res.status(201).json(goal);
-        console.log("came 5");
     } catch (error) {
         res.status(500).json({ message: "Server error", error });
     }

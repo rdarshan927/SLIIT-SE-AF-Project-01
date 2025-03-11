@@ -2,6 +2,7 @@ const User = require("../models/User");
 const Transaction = require("../models/Transaction");
 const Category = require("../models/Category");
 const Limit = require("../models/Limit");
+const mongoose = require("mongoose");
 
 const createUser = async (req, res) => {
     try {
@@ -61,22 +62,6 @@ const deleteUser = async (req, res) => {
     }
 };
 
-// const updateUser = async (req, res) => {
-//     try {
-//         const { email, role } = req.body;
-//         const user = await User.findById(req.params.id);
-//         if (!user) return res.status(404).json({ message: "User not found" });
-
-//         if (email) user.email = email;
-//         if (role) user.role = role;
-
-//         await user.save();
-//         res.json({ message: "User updated successfully", user });
-//     } catch (error) {
-//         res.status(500).json({ message: "Server error", error });
-//     }
-// };
-
 const getAllTransactions = async (req, res) => {
     try {
         const transactions = await Transaction.find().populate("userId", "username email");
@@ -86,13 +71,19 @@ const getAllTransactions = async (req, res) => {
     }
 };
 
+
 const getReport = async (req, res) => {
     try {
-        const userId = req.user.id;
+        console.log("came to report");
+        const userId = req.user?.id;
+
+        if (!userId) {
+            return res.status(400).json({ message: "User ID is required" });
+        }
 
         // Aggregate transactions
         const transactions = await Transaction.aggregate([
-            { $match: { userId: mongoose.Types.ObjectId(userId) } },
+            { $match: { userId: new mongoose.Types.ObjectId(userId) } }, // Ensure ObjectId conversion
             {
                 $group: {
                     _id: null,
@@ -106,15 +97,24 @@ const getReport = async (req, res) => {
             }
         ]);
 
+        if (!transactions.length) {
+            return res.json({ totalIncome: 0, totalExpense: 0, balance: 0 });
+        }
+
         const balance = transactions[0].totalIncome - transactions[0].totalExpense;
 
-        res.json({ totalIncome: transactions[0].totalIncome, totalExpense: transactions[0].totalExpense, balance });
+        res.json({
+            totalIncome: transactions[0].totalIncome,
+            totalExpense: transactions[0].totalExpense,
+            balance,
+        });
     } catch (error) {
-        res.status(500).json({ message: "Server error", error });
+        console.error("Error in getReport:", error); // Log for debugging
+        res.status(500).json({ message: "Server error", error: error.message });
     }
 };
 
-// ➕ Add a new category
+
 const addCategory = async (req, res) => {
     try {
         const { name } = req.body;
